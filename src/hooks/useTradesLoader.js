@@ -1,0 +1,62 @@
+import { useState, useCallback } from "react";
+import { fetchHistoryPositions, fetchStats } from "../utils/api";
+
+export const useTradesLoader = (filters) => {
+  const [trades, setTrades] = useState([]);
+  const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const loadTrades = useCallback(async (filtersToUse) => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const [tradesData, statsData] = await Promise.all([
+        fetchHistoryPositions(filtersToUse),
+        fetchStats({
+          symbol: filtersToUse.symbol || null,
+          direction: filtersToUse.direction || null,
+          tvx: filtersToUse.tvx || null,
+          session: filtersToUse.session || null,
+          sourceType: filtersToUse.sourceType || null,
+          status: filtersToUse.status || null,
+          startDate: filtersToUse.startDate || null,
+          endDate: filtersToUse.endDate || null
+        }),
+      ]);
+      
+      setTrades(tradesData.trades || []);
+      setStats(statsData);
+    } catch (err) {
+      const errorMessage = err.message.includes('Failed to fetch') || err.message.includes('ERR_CONNECTION_REFUSED')
+        ? 'Не удалось подключиться к серверу. Убедитесь, что бэкенд запущен на http://localhost:3001'
+        : err.message;
+      setError(errorMessage);
+      console.error("Error loading trades:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const updateStats = useCallback(async (filtersToUse) => {
+    try {
+      const statsData = await fetchStats({
+        symbol: filtersToUse.symbol || null,
+        direction: filtersToUse.direction || null,
+        tvx: filtersToUse.tvx || null,
+        session: filtersToUse.session || null,
+        sourceType: filtersToUse.sourceType || null,
+        status: filtersToUse.status || null,
+        startDate: filtersToUse.startDate || null,
+        endDate: filtersToUse.endDate || null
+      });
+      setStats(statsData);
+    } catch (err) {
+      console.error("Ошибка при обновлении статистики:", err);
+    }
+  }, []);
+
+  return { trades, stats, loading, error, loadTrades, updateStats, setTrades };
+};
+
