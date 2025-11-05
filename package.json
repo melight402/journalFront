@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "React приложение для просмотра и анализа журнала торговых позиций с фильтрацией и статистикой",
   "author": "melight402",
+  "license": "ISC",
   "private": true,
   "type": "module",
   "scripts": {
