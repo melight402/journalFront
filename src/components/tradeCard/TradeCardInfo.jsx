@@ -16,7 +16,12 @@ const TradeCardInfo = ({ trade }) => {
         <span className="info-value">{parseFloat(trade.entry_price).toFixed(2)}</span>
       </div>
       
-      {trade.purchase_volume && (
+      {trade.position_usdt !== null && trade.position_usdt !== undefined ? (
+        <div className="info-item">
+          <span className="info-label">Позиция</span>
+          <span className="info-value">{parseFloat(trade.position_usdt).toFixed(2)} USDT</span>
+        </div>
+      ) : trade.purchase_volume && (
         <div className="info-item">
           <span className="info-label">Купленный объем</span>
           <span className="info-value">{parseFloat(trade.purchase_volume).toFixed(2)} USDT</span>

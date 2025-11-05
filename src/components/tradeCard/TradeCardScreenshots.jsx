@@ -10,6 +10,18 @@ const TradeCardScreenshots = ({ trade, onScreenshotClick }) => {
     ? getScreenshotUrl(trade.close_screenshot_path)
     : (trade.close_screenshot_url ? getScreenshotUrl(trade.close_screenshot_url) : null);
 
+  console.log('Trade screenshots data:', {
+    id: trade.id,
+    symbol: trade.symbol,
+    open_screenshot_path: trade.open_screenshot_path,
+    close_screenshot_path: trade.close_screenshot_path,
+    screenshot_url: trade.screenshot_url,
+    close_screenshot_url: trade.close_screenshot_url,
+    openScreenshotUrl,
+    closeScreenshotUrl,
+    hasCloseScreenshot: !!closeScreenshotUrl
+  });
+
   if (!openScreenshotUrl && !closeScreenshotUrl) {
     return null;
   }
