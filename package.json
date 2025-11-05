@@ -1,7 +1,9 @@
 {
   "name": "journal-front",
+  "version": "1.0.0",
+  "description": "React приложение для просмотра и анализа журнала торговых позиций с фильтрацией и статистикой",
+  "author": "melight402",
   "private": true,
-  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
