@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { fetchHistoryPositions, fetchStats } from "../utils/api";
 
-export const useTradesLoader = (filters) => {
+export const useTradesLoader = () => {
   const [trades, setTrades] = useState([]);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -33,7 +33,6 @@ export const useTradesLoader = (filters) => {
         ? 'Не удалось подключиться к серверу. Убедитесь, что бэкенд запущен на http://localhost:3001'
         : err.message;
       setError(errorMessage);
-      console.error("Error loading trades:", err);
     } finally {
       setLoading(false);
     }
@@ -52,8 +51,8 @@ export const useTradesLoader = (filters) => {
         endDate: filtersToUse.endDate || null
       });
       setStats(statsData);
-    } catch (err) {
-      console.error("Ошибка при обновлении статистики:", err);
+    } catch {
+      void 0;
     }
   }, []);
 

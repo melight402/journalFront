@@ -9,8 +9,8 @@ export const useTvxList = () => {
       try {
         const list = await fetchTvxList();
         setTvxList(list);
-      } catch (err) {
-        console.error("Ошибка при загрузке списка стратегий:", err);
+      } catch {
+        void 0;
       }
     };
     loadTvxList();

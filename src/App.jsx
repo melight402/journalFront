@@ -8,12 +8,12 @@ import { useTvxList } from "./hooks/useTvxList";
 
 const App = () => {
   const { filters, setFilters, resetFilters } = useFilters();
-  const { trades, stats, loading, error, loadTrades, updateStats, setTrades } = useTradesLoader(filters);
+  const { trades, stats, loading, error, loadTrades, updateStats, setTrades } = useTradesLoader();
   const { tvxList } = useTvxList();
 
   useEffect(() => {
     loadTrades(filters);
-  }, []);
+  }, [filters, loadTrades]);
 
   const handleApplyFilters = () => {
     loadTrades(filters);

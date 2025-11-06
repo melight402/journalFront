@@ -6,8 +6,8 @@ export const loadFiltersFromStorage = () => {
     if (stored) {
       return JSON.parse(stored);
     }
-  } catch (error) {
-    console.error('Error loading filters from localStorage:', error);
+  } catch {
+    void 0;
   }
   return null;
 };
@@ -15,16 +15,16 @@ export const loadFiltersFromStorage = () => {
 export const saveFiltersToStorage = (filters) => {
   try {
     localStorage.setItem(FILTERS_STORAGE_KEY, JSON.stringify(filters));
-  } catch (error) {
-    console.error('Error saving filters to localStorage:', error);
+  } catch {
+    void 0;
   }
 };
 
 export const clearFiltersFromStorage = () => {
   try {
     localStorage.removeItem(FILTERS_STORAGE_KEY);
-  } catch (error) {
-    console.error('Error clearing filters from localStorage:', error);
+  } catch {
+    void 0;
   }
 };
 

@@ -16,7 +16,6 @@ export const useTradeDelete = (onDelete) => {
         onDelete(tradeId);
       }
     } catch (error) {
-      console.error("Ошибка при удалении сделки:", error);
       alert(`Ошибка при удалении сделки: ${error.message}`);
     } finally {
       setIsDeleting(false);
