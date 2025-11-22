@@ -59,6 +59,13 @@ const TradeCardInfo = ({ trade }) => {
           </span>
         </div>
       )}
+      
+      {trade.note && (
+        <div className="info-item">
+          <span className="info-label">Заметка</span>
+          <span className="info-value">{trade.note}</span>
+        </div>
+      )}
     </div>
   );
 };
