@@ -1,15 +1,61 @@
-import React from "react";
-import { getTvxLabel } from "../../constants/index.js";
+import React, { useState } from "react";
+import { getTvxLabel, TVX_OPTIONS } from "../../constants/index.js";
+import { updatePositionTvx } from "../../utils/api.js";
 
 const TradeCardInfo = ({ trade }) => {
+  const [editing, setEditing] = useState(false);
+  const [localTvx, setLocalTvx] = useState(trade.tvx || "");
+  const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handleSave = async (newTvx) => {
+    setIsSaving(true);
+    setError(null);
+    try {
+      await updatePositionTvx(trade.id, newTvx);
+      setLocalTvx(newTvx || "");
+      setEditing(false);
+    } catch {
+      setError('Ошибка сохранения');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   return (
     <div className="trade-info">
-      {trade.tvx && (
-        <div className="info-item">
-          <span className="info-label">Стратегия</span>
-          <span className="info-value">{getTvxLabel(trade.tvx)}</span>
-        </div>
-      )}
+      <div className="info-item">
+        <span className="info-label">Стратегия</span>
+        <span className="info-value">
+          {editing ? (
+            <select
+              value={localTvx || ""}
+              onChange={(e) => setLocalTvx(e.target.value)}
+              onBlur={(e) => handleSave(e.target.value)}
+              disabled={isSaving}
+              autoFocus
+            >
+              <option value="">Без стратегии</option>
+              {TVX_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
+            </select>
+          ) : (
+            <span
+              onClick={() => setEditing(true)}
+              style={{ cursor: 'pointer' }}
+              title="Кликните для редактирования"
+            >
+              {getTvxLabel(localTvx) || '—'}
+            </span>
+          )}
+          {isSaving && <span style={{marginLeft:8}}>Сохранение...</span>}
+          {error && <span style={{color:'red', marginLeft:8}}>{error}</span>}
+        </span>
+      </div>
+
+      {/* show other info items below */}
+      {trade.tvx === undefined && !localTvx && null}
       
       <div className="info-item">
         <span className="info-label">Цена</span>
