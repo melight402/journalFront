@@ -73,7 +73,7 @@ const App = () => {
       
       {loading && <div className="loading">Загрузка...</div>}
       
-      {!loading && stats && <Stats stats={stats} />}
+      {!loading && stats && <Stats stats={stats} trades={trades} />}
       
       {!loading && <TradesList trades={trades} onDelete={handleDeleteTrade} />}
     </div>

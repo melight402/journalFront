@@ -8,6 +8,7 @@ export const TVX_OPTIONS = [
   { value: "imbalance_retest", label: "Ретест от Имбаланса" },
   { value: "channel_exit", label: "Выход из Канала" },
   { value: "triangle_exit", label: "Выход Треугольник" },
+  { value: "liquidity_gathering", label: "Сбор ликвидности" },
 ];
 
 export const TVX_LABELS = TVX_OPTIONS.reduce((acc, option) => {
