@@ -21,12 +21,20 @@ export const useTradesLoader = () => {
           session: filtersToUse.session || null,
           sourceType: filtersToUse.sourceType || null,
           status: filtersToUse.status || null,
+          timeframe: filtersToUse.timeframe || null,
           startDate: filtersToUse.startDate || null,
           endDate: filtersToUse.endDate || null
         }),
       ]);
       
-      setTrades(tradesData.trades || []);
+      let fetched = tradesData.trades || [];
+      if (filtersToUse && filtersToUse.timeframe) {
+        fetched = fetched.filter(t => {
+          if (!t.timeframe) return false;
+          return String(t.timeframe) === String(filtersToUse.timeframe);
+        });
+      }
+      setTrades(fetched);
       setStats(statsData);
     } catch (err) {
       const errorMessage = err.message.includes('Failed to fetch') || err.message.includes('ERR_CONNECTION_REFUSED')
@@ -47,6 +55,7 @@ export const useTradesLoader = () => {
         session: filtersToUse.session || null,
         sourceType: filtersToUse.sourceType || null,
         status: filtersToUse.status || null,
+        timeframe: filtersToUse.timeframe || null,
         startDate: filtersToUse.startDate || null,
         endDate: filtersToUse.endDate || null
       });

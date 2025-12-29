@@ -9,6 +9,7 @@ export const fetchHistoryPositions = async (filters = {}) => {
   if (filters.session) params.append('session', filters.session);
   if (filters.sourceType) params.append('sourceType', filters.sourceType);
   if (filters.status) params.append('status', filters.status);
+  if (filters.timeframe) params.append('timeframe', filters.timeframe);
   if (filters.startDate) params.append('startDate', filters.startDate);
   if (filters.endDate) params.append('endDate', filters.endDate);
   if (filters.limit) params.append('limit', filters.limit);
@@ -45,6 +46,7 @@ export const fetchStats = async (filters = {}) => {
   if (filters.session) params.append('session', filters.session);
   if (filters.sourceType) params.append('sourceType', filters.sourceType);
   if (filters.status) params.append('status', filters.status);
+  if (filters.timeframe) params.append('timeframe', filters.timeframe);
   if (filters.startDate) params.append('startDate', filters.startDate);
   if (filters.endDate) params.append('endDate', filters.endDate);
 

@@ -6,6 +6,7 @@ import SessionFilter from "./SessionFilter.jsx";
 import SourceTypeFilter from "./SourceTypeFilter.jsx";
 import StatusFilter from "./StatusFilter.jsx";
 import DateRangeFilter from "./DateRangeFilter.jsx";
+import TimeframeFilter from "./TimeframeFilter.jsx";
 
 const Filters = ({ filters, tvxList = [], onFiltersChange, onApply, onReset }) => {
   const handleChange = (field, value) => {
@@ -20,6 +21,7 @@ const Filters = ({ filters, tvxList = [], onFiltersChange, onApply, onReset }) =
       <SymbolFilter value={filters.symbol} onChange={handleChange} />
       <DirectionFilter value={filters.direction} onChange={handleChange} />
       <TvxFilter value={filters.tvx} tvxList={tvxList} onChange={handleChange} />
+      <TimeframeFilter value={filters.timeframe} onChange={handleChange} />
       <SessionFilter value={filters.session} onChange={handleChange} />
       <SourceTypeFilter value={filters.sourceType} onChange={handleChange} />
       <StatusFilter value={filters.status} onChange={handleChange} />

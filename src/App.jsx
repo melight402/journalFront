@@ -50,7 +50,7 @@ const App = () => {
 
   return (
     <div className="app-container">
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
         <h1 className="app-title">📊 Trading Journal - Журнал сделок</h1>
         <div>
           <button onClick={handleDeleteVisible} style={{ cursor: 'pointer' }}>Удалить видимые</button>
