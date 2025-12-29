@@ -108,3 +108,19 @@ export const updatePositionTvx = async (id, tvx) => {
   return await response.json();
 };
 
+export const updatePositionNote = async (id, note) => {
+  const url = `${API_BASE_URL}/positions/${id}`;
+  const response = await fetch(url, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ note })
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.error || 'Failed to update position note');
+  }
+
+  return await response.json();
+};
+

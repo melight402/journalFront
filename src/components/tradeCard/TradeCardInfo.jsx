@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import { getTvxLabel, TVX_OPTIONS } from "../../constants/index.js";
-import { updatePositionTvx } from "../../utils/api.js";
+import { updatePositionTvx, updatePositionNote } from "../../utils/api.js";
 
 const TradeCardInfo = ({ trade }) => {
   const [editing, setEditing] = useState(false);
   const [localTvx, setLocalTvx] = useState(trade.tvx || "");
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState(null);
+  const [editingNote, setEditingNote] = useState(false);
+  const [localNote, setLocalNote] = useState(trade.note || "");
+  const [isSavingNote, setIsSavingNote] = useState(false);
+  const [errorNote, setErrorNote] = useState(null);
 
   const handleSave = async (newTvx) => {
     setIsSaving(true);
@@ -19,6 +23,20 @@ const TradeCardInfo = ({ trade }) => {
       setError('Ошибка сохранения');
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleSaveNote = async (newNote) => {
+    setIsSavingNote(true);
+    setErrorNote(null);
+    try {
+      await updatePositionNote(trade.id, newNote);
+      setLocalNote(newNote || "");
+      setEditingNote(false);
+    } catch {
+      setErrorNote('Ошибка сохранения');
+    } finally {
+      setIsSavingNote(false);
     }
   };
 
@@ -106,12 +124,32 @@ const TradeCardInfo = ({ trade }) => {
         </div>
       )}
       
-      {trade.note && (
-        <div className="info-item">
-          <span className="info-label">Заметка</span>
-          <span className="info-value">{trade.note}</span>
-        </div>
-      )}
+      <div className="info-item">
+        <span className="info-label">Заметка</span>
+        <span className="info-value">
+          {editingNote ? (
+            <textarea
+              value={localNote}
+              onChange={(e) => setLocalNote(e.target.value)}
+              onBlur={(e) => handleSaveNote(e.target.value)}
+              rows={3}
+              disabled={isSavingNote}
+              autoFocus
+              style={{ width: '100%' }}
+            />
+          ) : (
+            <span
+              onClick={() => setEditingNote(true)}
+              style={{ cursor: 'pointer', whiteSpace: 'pre-wrap' }}
+              title="Кликните для редактирования"
+            >
+              {localNote || '—'}
+            </span>
+          )}
+          {isSavingNote && <span style={{marginLeft:8}}>Сохранение...</span>}
+          {errorNote && <span style={{color:'red', marginLeft:8}}>{errorNote}</span>}
+        </span>
+      </div>
     </div>
   );
 };
