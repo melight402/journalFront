@@ -5,6 +5,7 @@ import TradesList from "./components/tradeCard/TradesList.jsx";
 import { useFilters } from "./hooks/useFilters";
 import { useTradesLoader } from "./hooks/useTradesLoader";
 import { useTvxList } from "./hooks/useTvxList";
+import { deleteTrade } from "./utils/api.js";
 
 const App = () => {
   const { filters, setFilters, resetFilters } = useFilters();
@@ -29,9 +30,32 @@ const App = () => {
     await updateStats(filters);
   };
 
+  const handleDeleteVisible = async () => {
+    const count = trades.length;
+    if (!count) return;
+    const confirmed = window.confirm(`Точно удалить ${count} записей, видимых на странице? Это действие необратимо.`);
+    if (!confirmed) return;
+
+    try {
+      const ids = trades.map(t => t.id);
+      for (const id of ids) {
+        await deleteTrade(id);
+      }
+      setTrades(prev => prev.filter(t => !ids.includes(t.id)));
+      await updateStats(filters);
+    } catch (err) {
+      alert('Ошибка при удалении: ' + (err.message || err));
+    }
+  };
+
   return (
     <div className="app-container">
-      <h1 className="app-title">📊 Trading Journal - Журнал сделок</h1>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <h1 className="app-title">📊 Trading Journal - Журнал сделок</h1>
+        <div>
+          <button onClick={handleDeleteVisible} style={{ cursor: 'pointer' }}>Удалить видимые</button>
+        </div>
+      </div>
       
       <Filters
         filters={filters}
