@@ -73,6 +73,12 @@ const TradeCardInfo = ({ trade }) => {
       </div>
 
       {/* show other info items below */}
+      {trade.timeframe && (
+        <div className="info-item">
+          <span className="info-label">Таймфрейм</span>
+          <span className="info-value">{trade.timeframe}</span>
+        </div>
+      )}
       {trade.tvx === undefined && !localTvx && null}
       
       <div className="info-item">
