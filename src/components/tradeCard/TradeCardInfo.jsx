@@ -12,7 +12,7 @@ const TradeCardInfo = ({ trade }) => {
   const [isSavingNote, setIsSavingNote] = useState(false);
   const [errorNote, setErrorNote] = useState(null);
   const [editingOutcome, setEditingOutcome] = useState(false);
-  const initialOutcome = trade.outcome || (parseFloat(trade.profit_amount || 0) > 0 ? 'profit' : parseFloat(trade.loss_amount || 0) > 0 ? 'loss' : '');
+  const initialOutcome = trade.profit_loss || trade.outcome || (parseFloat(trade.profit_amount || 0) > 0 ? 'profit' : parseFloat(trade.loss_amount || 0) > 0 ? 'loss' : '');
   const [localOutcome, setLocalOutcome] = useState(initialOutcome);
   const [isSavingOutcome, setIsSavingOutcome] = useState(false);
   const [errorOutcome, setErrorOutcome] = useState(null);
