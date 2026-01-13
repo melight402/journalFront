@@ -20,3 +20,17 @@ export const getTvxLabel = (tvxValue) => {
   return TVX_LABELS[tvxValue] || tvxValue;
 };
 
+export const OUTCOME_OPTIONS = [
+  { value: "profit", label: "Прибыль" },
+  { value: "loss", label: "Убыток" },
+];
+
+export const OUTCOME_LABELS = OUTCOME_OPTIONS.reduce((acc, option) => {
+  acc[option.value] = option.label;
+  return acc;
+}, {});
+
+export const getOutcomeLabel = (outcomeValue) => {
+  return OUTCOME_LABELS[outcomeValue] || outcomeValue;
+};
+

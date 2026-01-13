@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { getTvxLabel, TVX_OPTIONS } from "../../constants/index.js";
-import { updatePositionTvx, updatePositionNote } from "../../utils/api.js";
+import { getTvxLabel, TVX_OPTIONS, OUTCOME_OPTIONS, getOutcomeLabel } from "../../constants/index.js";
+import { updatePositionTvx, updatePositionNote, updatePositionOutcome } from "../../utils/api.js";
 
 const TradeCardInfo = ({ trade }) => {
   const [editing, setEditing] = useState(false);
@@ -11,6 +11,11 @@ const TradeCardInfo = ({ trade }) => {
   const [localNote, setLocalNote] = useState(trade.note || "");
   const [isSavingNote, setIsSavingNote] = useState(false);
   const [errorNote, setErrorNote] = useState(null);
+  const [editingOutcome, setEditingOutcome] = useState(false);
+  const initialOutcome = trade.outcome || (parseFloat(trade.profit_amount || 0) > 0 ? 'profit' : parseFloat(trade.loss_amount || 0) > 0 ? 'loss' : '');
+  const [localOutcome, setLocalOutcome] = useState(initialOutcome);
+  const [isSavingOutcome, setIsSavingOutcome] = useState(false);
+  const [errorOutcome, setErrorOutcome] = useState(null);
 
   const handleSave = async (newTvx) => {
     setIsSaving(true);
@@ -23,6 +28,20 @@ const TradeCardInfo = ({ trade }) => {
       setError('Ошибка сохранения');
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleSaveOutcome = async (newOutcome) => {
+    setIsSavingOutcome(true);
+    setErrorOutcome(null);
+    try {
+      await updatePositionOutcome(trade.id, newOutcome);
+      setLocalOutcome(newOutcome || "");
+      setEditingOutcome(false);
+    } catch {
+      setErrorOutcome('Ошибка сохранения');
+    } finally {
+      setIsSavingOutcome(false);
     }
   };
 
@@ -69,6 +88,36 @@ const TradeCardInfo = ({ trade }) => {
           )}
           {isSaving && <span style={{marginLeft:8}}>Сохранение...</span>}
           {error && <span style={{color:'red', marginLeft:8}}>{error}</span>}
+        </span>
+      </div>
+
+      <div className="info-item">
+        <span className="info-label">Результат</span>
+        <span className="info-value">
+          {editingOutcome ? (
+            <select
+              value={localOutcome || ""}
+              onChange={(e) => setLocalOutcome(e.target.value)}
+              onBlur={(e) => handleSaveOutcome(e.target.value)}
+              disabled={isSavingOutcome}
+              autoFocus
+            >
+              <option value="">Не выбран</option>
+              {OUTCOME_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
+            </select>
+          ) : (
+            <span
+              onClick={() => setEditingOutcome(true)}
+              style={{ cursor: 'pointer' }}
+              title="Кликните для редактирования"
+            >
+              {getOutcomeLabel(localOutcome) || '—'}
+            </span>
+          )}
+          {isSavingOutcome && <span style={{marginLeft:8}}>Сохранение...</span>}
+          {errorOutcome && <span style={{color:'red', marginLeft:8}}>{errorOutcome}</span>}
         </span>
       </div>
 
