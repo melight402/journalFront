@@ -126,19 +126,3 @@ export const updatePositionNote = async (id, note) => {
   return await response.json();
 };
 
-export const updatePositionFields = async (id, fields) => {
-  const url = `${API_BASE_URL}/positions/${id}`;
-  const response = await fetch(url, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(fields)
-  });
-
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({}));
-    throw new Error(error.error || 'Failed to update position fields');
-  }
-
-  return await response.json();
-};
-

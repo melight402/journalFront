@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { getTvxLabel, TVX_OPTIONS } from "../../constants/index.js";
 import { updatePositionTvx, updatePositionNote } from "../../utils/api.js";
 
-const TradeCardInfo = ({ trade, onUpdate }) => {
+const TradeCardInfo = ({ trade }) => {
   const [editing, setEditing] = useState(false);
   const [localTvx, setLocalTvx] = useState(trade.tvx || "");
   const [isSaving, setIsSaving] = useState(false);
@@ -11,16 +11,6 @@ const TradeCardInfo = ({ trade, onUpdate }) => {
   const [localNote, setLocalNote] = useState(trade.note || "");
   const [isSavingNote, setIsSavingNote] = useState(false);
   const [errorNote, setErrorNote] = useState(null);
-  const [localProfitLoss, setLocalProfitLoss] = useState(trade.profit_loss || "");
-  const [localProfitAmount, setLocalProfitAmount] = useState(
-    trade.profit_amount !== null && trade.profit_amount !== undefined ? String(trade.profit_amount) : ""
-  );
-  const [localLossAmount, setLocalLossAmount] = useState(
-    trade.loss_amount !== null && trade.loss_amount !== undefined ? String(trade.loss_amount) : ""
-  );
-  const [editingProfitAmount, setEditingProfitAmount] = useState(false);
-  const [editingLossAmount, setEditingLossAmount] = useState(false);
-  const [isSavingAmount, setIsSavingAmount] = useState(false);
 
   const handleSave = async (newTvx) => {
     setIsSaving(true);
@@ -49,31 +39,6 @@ const TradeCardInfo = ({ trade, onUpdate }) => {
       setIsSavingNote(false);
     }
   };
-
-  const handleSaveAmount = async (field, value) => {
-    setIsSavingAmount(true);
-    try {
-      if (onUpdate) {
-        const payload = {};
-        payload[field] = value === "" ? null : parseFloat(value);
-        await onUpdate(payload);
-        if (field === 'profit_amount') setLocalProfitAmount(value);
-        if (field === 'loss_amount') setLocalLossAmount(value);
-      }
-    } catch {
-      // ignore save error for now
-    } finally {
-      setIsSavingAmount(false);
-      setEditingProfitAmount(false);
-      setEditingLossAmount(false);
-    }
-  };
-
-  useEffect(() => {
-    setLocalProfitLoss(trade.profit_loss || "");
-    setLocalProfitAmount(trade.profit_amount !== null && trade.profit_amount !== undefined ? String(trade.profit_amount) : "");
-    setLocalLossAmount(trade.loss_amount !== null && trade.loss_amount !== undefined ? String(trade.loss_amount) : "");
-  }, [trade.profit_loss, trade.profit_amount, trade.loss_amount]);
 
   return (
     <div className="trade-info">
@@ -106,8 +71,6 @@ const TradeCardInfo = ({ trade, onUpdate }) => {
           {error && <span style={{color:'red', marginLeft:8}}>{error}</span>}
         </span>
       </div>
-
-      {/* show other info items below */}
       {trade.timeframe && (
         <div className="info-item">
           <span className="info-label">Таймфрейм</span>
@@ -147,60 +110,20 @@ const TradeCardInfo = ({ trade, onUpdate }) => {
         </div>
       )}
       
-      {(localProfitLoss === 'profit' || (trade.profit_amount !== null && trade.profit_amount !== undefined)) && (
+      {trade.profit_amount !== null && trade.profit_amount !== undefined && (
         <div className="info-item">
           <span className="info-label" style={{ color: "#26a69a" }}>Прибыль</span>
           <span className="info-value" style={{ color: "#26a69a", fontWeight: "bold" }}>
-            {editingProfitAmount ? (
-              <input
-                type="number"
-                step="0.01"
-                value={localProfitAmount}
-                onChange={(e) => setLocalProfitAmount(e.target.value)}
-                onBlur={(e) => handleSaveAmount('profit_amount', e.target.value)}
-                autoFocus
-                disabled={isSavingAmount}
-                style={{ width: 120 }}
-              />
-            ) : (
-              <span
-                onClick={() => setEditingProfitAmount(true)}
-                style={{ cursor: 'pointer' }}
-                title="Кликните для редактирования"
-              >
-                {localProfitAmount !== "" ? parseFloat(localProfitAmount).toFixed(2) + ' USDT' : '—'}
-              </span>
-            )}
-            {isSavingAmount && <span style={{marginLeft:8}}>Сохранение...</span>}
+            {parseFloat(trade.profit_amount).toFixed(2)} USDT
           </span>
         </div>
       )}
-
-      {(localProfitLoss === 'loss' || (trade.loss_amount !== null && trade.loss_amount !== undefined)) && (
+      
+      {trade.loss_amount !== null && trade.loss_amount !== undefined && (
         <div className="info-item">
           <span className="info-label" style={{ color: "#ef5350" }}>Убыток</span>
           <span className="info-value" style={{ color: "#ef5350", fontWeight: "bold" }}>
-            {editingLossAmount ? (
-              <input
-                type="number"
-                step="0.01"
-                value={localLossAmount}
-                onChange={(e) => setLocalLossAmount(e.target.value)}
-                onBlur={(e) => handleSaveAmount('loss_amount', e.target.value)}
-                autoFocus
-                disabled={isSavingAmount}
-                style={{ width: 120 }}
-              />
-            ) : (
-              <span
-                onClick={() => setEditingLossAmount(true)}
-                style={{ cursor: 'pointer' }}
-                title="Кликните для редактирования"
-              >
-                {localLossAmount !== "" ? parseFloat(localLossAmount).toFixed(2) + ' USDT' : '—'}
-              </span>
-            )}
-            {isSavingAmount && <span style={{marginLeft:8}}>Сохранение...</span>}
+            {parseFloat(trade.loss_amount).toFixed(2)} USDT
           </span>
         </div>
       )}

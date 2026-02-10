@@ -4,7 +4,6 @@ const Stats = ({ stats, trades }) => {
   const netProfitLoss = stats.net_profit_loss || 0;
   const isProfit = netProfitLoss >= 0;
 
-  // calculate percent profitable among displayed trades
   const displayedCount = Array.isArray(trades) ? trades.length : 0;
   const profitableCount = Array.isArray(trades)
     ? trades.reduce((acc, t) => acc + (parseFloat(t.profit_amount || 0) > 0 ? 1 : 0), 0)

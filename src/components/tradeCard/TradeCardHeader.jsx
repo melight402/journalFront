@@ -1,19 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 
-const TradeCardHeader = ({ trade, onDelete, isDeleting, onUpdate }) => {
-  const [localProfitLoss, setLocalProfitLoss] = useState(trade.profit_loss || "");
-
-  const handleChange = async (e) => {
-    const val = e.target.value || null;
-    setLocalProfitLoss(val || "");
-    if (onUpdate) {
-      try {
-        await onUpdate({ profit_loss: val });
-      } catch {
-        // ignore
-      }
-    }
-  };
+const TradeCardHeader = ({ trade, onDelete, isDeleting }) => {
+  const isProfit = trade.profit_loss === "profit";
+  const profitLossLabel = isProfit ? "Прибыль" : "Убыток";
 
   return (
     <div className="trade-header">
@@ -21,16 +10,17 @@ const TradeCardHeader = ({ trade, onDelete, isDeleting, onUpdate }) => {
       <span className={`trade-direction direction-${trade.direction.toLowerCase()}`}>
         {trade.direction}
       </span>
-      <select
-        className="trade-profit-loss"
-        value={localProfitLoss}
-        onChange={handleChange}
-        title="Выберите Прибыль или Убыток"
-      >
-        <option value="">—</option>
-        <option value="profit">Прибыль</option>
-        <option value="loss">Убыток</option>
-      </select>
+      {trade.profit_loss && (
+        <span 
+          className="trade-profit-loss"
+          style={{ 
+            color: isProfit ? "#26a69a" : "#ef5350",
+            fontWeight: "bold"
+          }}
+        >
+          {profitLossLabel}
+        </span>
+      )}
       <button
         className="trade-delete-button"
         onClick={(e) => {
