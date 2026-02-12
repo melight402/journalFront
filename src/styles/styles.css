@@ -88,21 +88,66 @@ body {
   background: #4a5165;
 }
 
-.filter-checkboxes {
+.weekday-filter-container {
+  position: relative;
+}
+
+.weekday-filter-button {
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 5px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 12px !important;
+  background: #383e55 !important;
+  border: 1px solid #383e55 !important;
+  border-radius: 4px;
+  color: #ffffff !important;
+  font-size: 14px;
+  min-width: 150px;
+  cursor: pointer;
+}
+
+.weekday-filter-button:hover {
+  border-color: #26a69a !important;
+}
+
+.weekday-filter-button:focus {
+  outline: none;
+  border-color: #26a69a !important;
+}
+
+.dropdown-arrow {
+  font-size: 10px;
+  color: #9EAAC7;
+  transition: transform 0.2s;
+}
+
+.weekday-filter-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+  background: #2a2e39;
+  border: 1px solid #383e55;
+  border-radius: 4px;
+  min-width: 150px;
+  z-index: 1000;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .filter-checkbox-label {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   cursor: pointer;
   color: #ffffff;
   font-size: 14px;
   user-select: none;
+  padding: 4px 0;
 }
 
 .filter-checkbox {
