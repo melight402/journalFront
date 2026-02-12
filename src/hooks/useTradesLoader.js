@@ -34,6 +34,13 @@ export const useTradesLoader = () => {
           return String(t.timeframe) === String(filtersToUse.timeframe);
         });
       }
+      if (filtersToUse && filtersToUse.weekdays && filtersToUse.weekdays.length > 0) {
+        fetched = fetched.filter(t => {
+          const tradeDate = new Date(t.open_date_time || t.created_at);
+          const weekday = tradeDate.getUTCDay();
+          return filtersToUse.weekdays.includes(weekday);
+        });
+      }
       setTrades(fetched);
       setStats(statsData);
     } catch (err) {

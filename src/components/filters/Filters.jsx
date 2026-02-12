@@ -7,6 +7,7 @@ import SourceTypeFilter from "./SourceTypeFilter.jsx";
 import StatusFilter from "./StatusFilter.jsx";
 import DateRangeFilter from "./DateRangeFilter.jsx";
 import TimeframeFilter from "./TimeframeFilter.jsx";
+import WeekdayFilter from "./WeekdayFilter.jsx";
 
 const Filters = ({ filters, tvxList = [], onFiltersChange, onApply, onReset }) => {
   const handleChange = (field, value) => {
@@ -25,6 +26,7 @@ const Filters = ({ filters, tvxList = [], onFiltersChange, onApply, onReset }) =
       <SessionFilter value={filters.session} onChange={handleChange} />
       <SourceTypeFilter value={filters.sourceType} onChange={handleChange} />
       <StatusFilter value={filters.status} onChange={handleChange} />
+      <WeekdayFilter value={filters.weekdays} onChange={handleChange} />
       <DateRangeFilter 
         startDate={filters.startDate} 
         endDate={filters.endDate} 

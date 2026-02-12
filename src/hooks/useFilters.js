@@ -14,6 +14,7 @@ export const useFilters = () => {
     session: "all",
     sourceType: "history",
     status: "all",
+    weekdays: [],
     startDate: defaultDates.startDate,
     endDate: defaultDates.endDate,
   });
@@ -31,6 +32,7 @@ export const useFilters = () => {
       session: "",
       sourceType: "",
       status: "all",
+      weekdays: [],
       startDate: "",
       endDate: "",
     };
