@@ -6,6 +6,7 @@ import { useFilters } from "./hooks/useFilters";
 import { useTradesLoader } from "./hooks/useTradesLoader";
 import { useTvxList } from "./hooks/useTvxList";
 import { deleteTrade } from "./utils/api.js";
+import { exportTradesToCsv } from "./utils/csvExport.js";
 
 const App = () => {
   const { filters, setFilters, resetFilters } = useFilters();
@@ -48,11 +49,20 @@ const App = () => {
     }
   };
 
+  const handleExportTrades = () => {
+    if (!trades.length) {
+      alert('Нет сделок для экспорта');
+      return;
+    }
+    exportTradesToCsv(trades);
+  };
+
   return (
     <div className="app-container">
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
         <h1 className="app-title">📊 Trading Journal - Журнал сделок</h1>
-        <div>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button onClick={handleExportTrades} style={{ cursor: 'pointer' }}>Скачать .csv</button>
           <button onClick={handleDeleteVisible} style={{ cursor: 'pointer' }}>Удалить видимые</button>
         </div>
       </div>
