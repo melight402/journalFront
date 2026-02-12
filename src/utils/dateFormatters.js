@@ -25,6 +25,10 @@ export const formatTradeDate = (dateString) => {
   const year = date.getUTCFullYear();
   const hours = String(date.getUTCHours()).padStart(2, '0');
   const minutes = String(date.getUTCMinutes()).padStart(2, '0');
-  return `${day}.${month}.${year}, ${hours}:${minutes}`;
+  
+  const weekdayFormatter = new Intl.DateTimeFormat('ru-RU', { weekday: 'short' });
+  const weekday = weekdayFormatter.format(date);
+  
+  return `${weekday} ${day}.${month}.${year}, ${hours}:${minutes}`;
 };
 
