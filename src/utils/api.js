@@ -12,6 +12,7 @@ export const fetchHistoryPositions = async (filters = {}) => {
   if (filters.timeframe) params.append('timeframe', filters.timeframe);
   if (filters.startDate) params.append('startDate', filters.startDate);
   if (filters.endDate) params.append('endDate', filters.endDate);
+  if (filters.weekdays && filters.weekdays.length > 0) params.append('weekdays', filters.weekdays.join(','));
   if (filters.limit) params.append('limit', filters.limit);
   if (filters.offset) params.append('offset', filters.offset);
 
@@ -49,6 +50,7 @@ export const fetchStats = async (filters = {}) => {
   if (filters.timeframe) params.append('timeframe', filters.timeframe);
   if (filters.startDate) params.append('startDate', filters.startDate);
   if (filters.endDate) params.append('endDate', filters.endDate);
+  if (filters.weekdays && filters.weekdays.length > 0) params.append('weekdays', filters.weekdays.join(','));
 
   const url = `${API_BASE_URL}/trades/stats?${params.toString()}`;
   const response = await fetch(url);

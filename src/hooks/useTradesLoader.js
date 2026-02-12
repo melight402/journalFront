@@ -23,7 +23,8 @@ export const useTradesLoader = () => {
           status: filtersToUse.status || null,
           timeframe: filtersToUse.timeframe || null,
           startDate: filtersToUse.startDate || null,
-          endDate: filtersToUse.endDate || null
+          endDate: filtersToUse.endDate || null,
+          weekdays: filtersToUse.weekdays || []
         }),
       ]);
       
@@ -32,13 +33,6 @@ export const useTradesLoader = () => {
         fetched = fetched.filter(t => {
           if (!t.timeframe) return false;
           return String(t.timeframe) === String(filtersToUse.timeframe);
-        });
-      }
-      if (filtersToUse && filtersToUse.weekdays && filtersToUse.weekdays.length > 0) {
-        fetched = fetched.filter(t => {
-          const tradeDate = new Date(t.open_date_time || t.created_at);
-          const weekday = tradeDate.getUTCDay();
-          return filtersToUse.weekdays.includes(weekday);
         });
       }
       setTrades(fetched);
@@ -64,7 +58,8 @@ export const useTradesLoader = () => {
         status: filtersToUse.status || null,
         timeframe: filtersToUse.timeframe || null,
         startDate: filtersToUse.startDate || null,
-        endDate: filtersToUse.endDate || null
+        endDate: filtersToUse.endDate || null,
+        weekdays: filtersToUse.weekdays || []
       });
       setStats(statsData);
     } catch {
