@@ -63,7 +63,6 @@ export const useTradesLoader = () => {
       });
       setStats(statsData);
     } catch {
-      void 0;
     }
   }, []);
 
