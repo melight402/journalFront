@@ -1,4 +1,5 @@
 export const TVX_OPTIONS = [
+  { value: "level_breakout", label: "Пробой уровня" },
   { value: "rollup", label: "нарастание вверх с закруглением снизу" },
   { value: "rolldown", label: "медленное падение с закруглением сверху" },
   { value: "false_breakout", label: "Ложный пробой (без импульса за уровнем)" },
@@ -8,7 +9,7 @@ export const TVX_OPTIONS = [
   { value: "breakout", label: "поджатие к уровню на пробой с наторговкой" },
   { value: "ipo_down", label: "Цена заходит за IPO" },
   { value: "inclined_level", label: "Выход из наклонного уровня" },
-  { value: "ma_up", label: "Средняя скользящая показывает вверз" },
+  { value: "ma_up", label: "Средняя скользящая показывает вверх" },
   { value: "ma_down", label: "Средняя скользящая показывает вниз" }
 ];
 
