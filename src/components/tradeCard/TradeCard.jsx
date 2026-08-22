@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ScreenshotModal from "./ScreenshotModal.jsx";
 import TradeCardHeader from "./TradeCardHeader.jsx";
 import TradeCardInfo from "./TradeCardInfo.jsx";
@@ -6,10 +6,35 @@ import TradeCardScreenshots from "./TradeCardScreenshots.jsx";
 import TradeCardDates from "./TradeCardDates.jsx";
 import { useTradeDelete } from "../../hooks/useTradeDelete";
 import { useScreenshotModal } from "../../hooks/useScreenshotModal";
+import { updatePositionProfitLoss } from "../../utils/api.js";
 
-const TradeCard = ({ trade, onDelete }) => {
+const TradeCard = ({ trade, onDelete, onProfitLossUpdated }) => {
   const { handleDelete, isDeleting } = useTradeDelete(onDelete);
   const { modalImage, openModal, closeModal } = useScreenshotModal();
+  const [isUpdatingProfitLoss, setIsUpdatingProfitLoss] = useState(false);
+
+  const handleToggleProfitLoss = async (currentTrade) => {
+    const next = currentTrade.profit_loss === "profit" ? "loss" : "profit";
+    const nextLabel = next === "profit" ? "прибыль" : "убыток";
+    const confirmed = window.confirm(
+      next === "loss"
+        ? "Сменить на убыток? Сумма будет взята из записанного стоп-лосса."
+        : `Сменить результат на «${nextLabel}»? Сумма пересчитается по тейк-профиту.`
+    );
+    if (!confirmed) return;
+
+    setIsUpdatingProfitLoss(true);
+    try {
+      const result = await updatePositionProfitLoss(currentTrade.id, next);
+      if (onProfitLossUpdated) {
+        onProfitLossUpdated(currentTrade.id, result.updated);
+      }
+    } catch (error) {
+      alert(`Ошибка при изменении результата: ${error.message}`);
+    } finally {
+      setIsUpdatingProfitLoss(false);
+    }
+  };
 
   return (
     <>
@@ -17,7 +42,9 @@ const TradeCard = ({ trade, onDelete }) => {
         <TradeCardHeader 
           trade={trade} 
           onDelete={handleDelete} 
-          isDeleting={isDeleting} 
+          isDeleting={isDeleting}
+          onToggleProfitLoss={handleToggleProfitLoss}
+          isUpdatingProfitLoss={isUpdatingProfitLoss}
         />
         <TradeCardInfo trade={trade} />
         <TradeCardScreenshots 

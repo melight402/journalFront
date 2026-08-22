@@ -1,8 +1,9 @@
 import React from "react";
 
-const TradeCardHeader = ({ trade, onDelete, isDeleting }) => {
+const TradeCardHeader = ({ trade, onDelete, isDeleting, onToggleProfitLoss, isUpdatingProfitLoss }) => {
   const isProfit = trade.profit_loss === "profit";
   const profitLossLabel = isProfit ? "Прибыль" : "Убыток";
+  const nextLabel = isProfit ? "убыток" : "прибыль";
 
   return (
     <div className="trade-header">
@@ -11,15 +12,22 @@ const TradeCardHeader = ({ trade, onDelete, isDeleting }) => {
         {trade.direction}
       </span>
       {trade.profit_loss && (
-        <span 
-          className="trade-profit-loss"
+        <button
+          type="button"
+          className="trade-profit-loss trade-profit-loss-toggle"
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleProfitLoss(trade);
+          }}
+          disabled={isUpdatingProfitLoss || isDeleting}
           style={{ 
             color: isProfit ? "#26a69a" : "#ef5350",
             fontWeight: "bold"
           }}
+          title={`Нажмите, чтобы сменить на ${nextLabel}`}
         >
-          {profitLossLabel}
-        </span>
+          {isUpdatingProfitLoss ? "..." : profitLossLabel}
+        </button>
       )}
       <button
         className="trade-delete-button"

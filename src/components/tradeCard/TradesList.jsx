@@ -1,6 +1,6 @@
 import TradeCard from "./TradeCard.jsx";
 
-const TradesList = ({ trades, onDelete }) => {
+const TradesList = ({ trades, onDelete, onProfitLossUpdated }) => {
   if (trades.length === 0) {
     return (
       <div className="loading">
@@ -12,7 +12,7 @@ const TradesList = ({ trades, onDelete }) => {
   return (
     <div className="trades-container">
       {trades.map((trade) => (
-        <TradeCard key={trade.id} trade={trade} onDelete={onDelete} />
+        <TradeCard key={trade.id} trade={trade} onDelete={onDelete} onProfitLossUpdated={onProfitLossUpdated} />
       ))}
     </div>
   );

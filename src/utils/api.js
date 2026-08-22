@@ -128,3 +128,19 @@ export const updatePositionNote = async (id, note) => {
   return await response.json();
 };
 
+export const updatePositionProfitLoss = async (id, profitLoss) => {
+  const url = `${API_BASE_URL}/positions/${id}`;
+  const response = await fetch(url, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ profit_loss: profitLoss })
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.error || 'Failed to update profit/loss');
+  }
+
+  return await response.json();
+};
+

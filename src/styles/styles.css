@@ -216,6 +216,24 @@ body {
   font-size: 14px;
 }
 
+.trade-profit-loss-toggle {
+  background: transparent;
+  border: 1px dashed currentColor;
+  border-radius: 4px;
+  padding: 2px 8px;
+  cursor: pointer;
+  font: inherit;
+}
+
+.trade-profit-loss-toggle:hover:not(:disabled) {
+  opacity: 0.8;
+}
+
+.trade-profit-loss-toggle:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
 .trade-delete-button {
   background: transparent;
   border: none;

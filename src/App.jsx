@@ -31,6 +31,22 @@ const App = () => {
     await updateStats(filters);
   };
 
+  const handleProfitLossUpdated = async (tradeId, updated) => {
+    setTrades((prevTrades) =>
+      prevTrades.map((trade) =>
+        trade.id === tradeId
+          ? {
+              ...trade,
+              profit_loss: updated.profit_loss,
+              profit_amount: updated.profit_amount,
+              loss_amount: updated.loss_amount,
+            }
+          : trade
+      )
+    );
+    await updateStats(filters);
+  };
+
   const handleDeleteVisible = async () => {
     const count = trades.length;
     if (!count) return;
@@ -85,7 +101,13 @@ const App = () => {
       
       {!loading && stats && <Stats stats={stats} trades={trades} />}
       
-      {!loading && <TradesList trades={trades} onDelete={handleDeleteTrade} />}
+      {!loading && (
+        <TradesList
+          trades={trades}
+          onDelete={handleDeleteTrade}
+          onProfitLossUpdated={handleProfitLossUpdated}
+        />
+      )}
     </div>
   );
 };
