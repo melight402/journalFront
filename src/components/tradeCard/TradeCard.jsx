@@ -13,16 +13,7 @@ const TradeCard = ({ trade, onDelete, onProfitLossUpdated }) => {
   const { modalImage, openModal, closeModal } = useScreenshotModal();
   const [isUpdatingProfitLoss, setIsUpdatingProfitLoss] = useState(false);
 
-  const handleToggleProfitLoss = async (currentTrade) => {
-    const next = currentTrade.profit_loss === "profit" ? "loss" : "profit";
-    const nextLabel = next === "profit" ? "прибыль" : "убыток";
-    const confirmed = window.confirm(
-      next === "loss"
-        ? "Сменить на убыток? Сумма будет взята из записанного стоп-лосса."
-        : `Сменить результат на «${nextLabel}»? Сумма пересчитается по тейк-профиту.`
-    );
-    if (!confirmed) return;
-
+  const handleProfitLossChange = async (currentTrade, next) => {
     setIsUpdatingProfitLoss(true);
     try {
       const result = await updatePositionProfitLoss(currentTrade.id, next);
@@ -43,7 +34,7 @@ const TradeCard = ({ trade, onDelete, onProfitLossUpdated }) => {
           trade={trade} 
           onDelete={handleDelete} 
           isDeleting={isDeleting}
-          onToggleProfitLoss={handleToggleProfitLoss}
+          onProfitLossChange={handleProfitLossChange}
           isUpdatingProfitLoss={isUpdatingProfitLoss}
         />
         <TradeCardInfo trade={trade} />

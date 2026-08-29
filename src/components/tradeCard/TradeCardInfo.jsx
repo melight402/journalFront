@@ -11,6 +11,19 @@ const TradeCardInfo = ({ trade }) => {
   const [localNote, setLocalNote] = useState(trade.note || "");
   const [isSavingNote, setIsSavingNote] = useState(false);
   const [errorNote, setErrorNote] = useState(null);
+  const showResultFields = trade.profit_loss !== "breakeven";
+
+  const resultAmount = trade.profit_amount !== null && trade.profit_amount !== undefined
+    ? parseFloat(trade.profit_amount)
+    : trade.loss_amount !== null && trade.loss_amount !== undefined
+      ? -parseFloat(trade.loss_amount)
+      : null;
+  const positionAmount = trade.position_usdt !== null && trade.position_usdt !== undefined
+    ? parseFloat(trade.position_usdt)
+    : parseFloat(trade.purchase_volume);
+  const roi = resultAmount !== null && Number.isFinite(resultAmount) && positionAmount > 0
+    ? (resultAmount / positionAmount) * 100
+    : null;
 
   const handleSave = async (newTvx) => {
     setIsSaving(true);
@@ -109,8 +122,17 @@ const TradeCardInfo = ({ trade }) => {
           <span className="info-value">{parseFloat(trade.risk_usdt).toFixed(2)} USDT</span>
         </div>
       )}
+
+      {showResultFields && roi !== null && (
+        <div className="info-item">
+          <span className="info-label" style={{ color: roi >= 0 ? "#26a69a" : "#ef5350" }}>ROI</span>
+          <span className="info-value" style={{ color: roi >= 0 ? "#26a69a" : "#ef5350", fontWeight: "bold" }}>
+            {roi >= 0 ? "+" : ""}{roi.toFixed(2)}%
+          </span>
+        </div>
+      )}
       
-      {trade.profit_amount !== null && trade.profit_amount !== undefined && (
+      {showResultFields && trade.profit_amount !== null && trade.profit_amount !== undefined && (
         <div className="info-item">
           <span className="info-label" style={{ color: "#26a69a" }}>Прибыль</span>
           <span className="info-value" style={{ color: "#26a69a", fontWeight: "bold" }}>
@@ -119,7 +141,7 @@ const TradeCardInfo = ({ trade }) => {
         </div>
       )}
       
-      {trade.loss_amount !== null && trade.loss_amount !== undefined && (
+      {showResultFields && trade.loss_amount !== null && trade.loss_amount !== undefined && (
         <div className="info-item">
           <span className="info-label" style={{ color: "#ef5350" }}>Убыток</span>
           <span className="info-value" style={{ color: "#ef5350", fontWeight: "bold" }}>

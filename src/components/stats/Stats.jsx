@@ -4,11 +4,13 @@ const Stats = ({ stats, trades }) => {
   const netProfitLoss = stats.net_profit_loss || 0;
   const isProfit = netProfitLoss >= 0;
 
-  const displayedCount = Array.isArray(trades) ? trades.length : 0;
-  const profitableCount = Array.isArray(trades)
-    ? trades.reduce((acc, t) => acc + (parseFloat(t.profit_amount || 0) > 0 ? 1 : 0), 0)
+  const resultTrades = Array.isArray(trades)
+    ? trades.filter((trade) => trade.profit_loss === "profit" || trade.profit_loss === "loss")
+    : [];
+  const profitableCount = resultTrades.filter((trade) => trade.profit_loss === "profit").length;
+  const profitablePercent = resultTrades.length
+    ? Math.round((profitableCount / resultTrades.length) * 100)
     : 0;
-  const profitablePercent = displayedCount ? Math.round((profitableCount / displayedCount) * 100) : 0;
 
   return (
     <div className="stats">

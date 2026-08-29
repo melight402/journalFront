@@ -8,7 +8,8 @@ export const fetchHistoryPositions = async (filters = {}) => {
   if (filters.tvx) params.append('tvx', filters.tvx);
   if (filters.session) params.append('session', filters.session);
   if (filters.sourceType) params.append('sourceType', filters.sourceType);
-  if (filters.status) params.append('status', filters.status);
+  if (filters.status && filters.status !== 'all') params.append('status', filters.status);
+  if (filters.profitLoss && filters.profitLoss !== 'all') params.append('profitLoss', filters.profitLoss);
   if (filters.timeframe) params.append('timeframe', filters.timeframe);
   if (filters.startDate) params.append('startDate', filters.startDate);
   if (filters.endDate) params.append('endDate', filters.endDate);
@@ -46,7 +47,8 @@ export const fetchStats = async (filters = {}) => {
   if (filters.tvx) params.append('tvx', filters.tvx);
   if (filters.session) params.append('session', filters.session);
   if (filters.sourceType) params.append('sourceType', filters.sourceType);
-  if (filters.status) params.append('status', filters.status);
+  if (filters.status && filters.status !== 'all') params.append('status', filters.status);
+  if (filters.profitLoss && filters.profitLoss !== 'all') params.append('profitLoss', filters.profitLoss);
   if (filters.timeframe) params.append('timeframe', filters.timeframe);
   if (filters.startDate) params.append('startDate', filters.startDate);
   if (filters.endDate) params.append('endDate', filters.endDate);

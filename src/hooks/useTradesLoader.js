@@ -21,6 +21,7 @@ export const useTradesLoader = () => {
           session: filtersToUse.session || null,
           sourceType: filtersToUse.sourceType || null,
           status: filtersToUse.status || null,
+          profitLoss: filtersToUse.profitLoss || null,
           timeframe: filtersToUse.timeframe || null,
           startDate: filtersToUse.startDate || null,
           endDate: filtersToUse.endDate || null,
@@ -56,6 +57,7 @@ export const useTradesLoader = () => {
         session: filtersToUse.session || null,
         sourceType: filtersToUse.sourceType || null,
         status: filtersToUse.status || null,
+        profitLoss: filtersToUse.profitLoss || null,
         timeframe: filtersToUse.timeframe || null,
         startDate: filtersToUse.startDate || null,
         endDate: filtersToUse.endDate || null,
@@ -63,6 +65,7 @@ export const useTradesLoader = () => {
       });
       setStats(statsData);
     } catch {
+      return;
     }
   }, []);
 

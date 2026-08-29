@@ -7,6 +7,7 @@ export const loadFiltersFromStorage = () => {
       return JSON.parse(stored);
     }
   } catch {
+    return null;
   }
   return null;
 };
@@ -15,6 +16,7 @@ export const saveFiltersToStorage = (filters) => {
   try {
     localStorage.setItem(FILTERS_STORAGE_KEY, JSON.stringify(filters));
   } catch {
+    return;
   }
 };
 
@@ -22,6 +24,7 @@ export const clearFiltersFromStorage = () => {
   try {
     localStorage.removeItem(FILTERS_STORAGE_KEY);
   } catch {
+    return;
   }
 };
 

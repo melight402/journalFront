@@ -10,6 +10,7 @@ export const useTvxList = () => {
         const list = await fetchTvxList();
         setTvxList(list);
       } catch {
+        setTvxList([]);
       }
     };
     loadTvxList();

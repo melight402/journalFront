@@ -5,6 +5,7 @@ import TvxFilter from "./TvxFilter.jsx";
 import SessionFilter from "./SessionFilter.jsx";
 import SourceTypeFilter from "./SourceTypeFilter.jsx";
 import StatusFilter from "./StatusFilter.jsx";
+import ProfitLossFilter from "./ProfitLossFilter.jsx";
 import DateRangeFilter from "./DateRangeFilter.jsx";
 import TimeframeFilter from "./TimeframeFilter.jsx";
 import WeekdayFilter from "./WeekdayFilter.jsx";
@@ -26,6 +27,7 @@ const Filters = ({ filters, tvxList = [], onFiltersChange, onApply, onReset }) =
       <SessionFilter value={filters.session} onChange={handleChange} />
       <SourceTypeFilter value={filters.sourceType} onChange={handleChange} />
       <StatusFilter value={filters.status} onChange={handleChange} />
+      <ProfitLossFilter value={filters.profitLoss} onChange={handleChange} />
       <WeekdayFilter value={filters.weekdays} onChange={handleChange} />
       <DateRangeFilter 
         startDate={filters.startDate} 

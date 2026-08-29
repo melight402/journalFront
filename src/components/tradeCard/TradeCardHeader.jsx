@@ -1,9 +1,9 @@
 import React from "react";
 
-const TradeCardHeader = ({ trade, onDelete, isDeleting, onToggleProfitLoss, isUpdatingProfitLoss }) => {
-  const isProfit = trade.profit_loss === "profit";
-  const profitLossLabel = isProfit ? "Прибыль" : "Убыток";
-  const nextLabel = isProfit ? "убыток" : "прибыль";
+const TradeCardHeader = ({ trade, onDelete, isDeleting, onProfitLossChange, isUpdatingProfitLoss }) => {
+  const profitLossColor = trade.profit_loss === "profit"
+    ? "#26a69a"
+    : trade.profit_loss === "loss" ? "#ef5350" : "#9EAAC7";
 
   return (
     <div className="trade-header">
@@ -12,22 +12,24 @@ const TradeCardHeader = ({ trade, onDelete, isDeleting, onToggleProfitLoss, isUp
         {trade.direction}
       </span>
       {trade.profit_loss && (
-        <button
-          type="button"
+        <select
           className="trade-profit-loss trade-profit-loss-toggle"
-          onClick={(e) => {
+          value={trade.profit_loss}
+          onChange={(e) => {
             e.stopPropagation();
-            onToggleProfitLoss(trade);
+            onProfitLossChange(trade, e.target.value);
           }}
           disabled={isUpdatingProfitLoss || isDeleting}
           style={{ 
-            color: isProfit ? "#26a69a" : "#ef5350",
+            color: profitLossColor,
             fontWeight: "bold"
           }}
-          title={`Нажмите, чтобы сменить на ${nextLabel}`}
+          title="Выберите результат сделки"
         >
-          {isUpdatingProfitLoss ? "..." : profitLossLabel}
-        </button>
+          <option value="profit">Прибыль</option>
+          <option value="loss">Убыток</option>
+          <option value="breakeven">Безубыток</option>
+        </select>
       )}
       <button
         className="trade-delete-button"
