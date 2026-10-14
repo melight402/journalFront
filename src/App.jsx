@@ -5,13 +5,13 @@ import TradesList from "./components/tradeCard/TradesList.jsx";
 import { useFilters } from "./hooks/useFilters";
 import { useTradesLoader } from "./hooks/useTradesLoader";
 import { useTvxList } from "./hooks/useTvxList";
-import { deleteTrade } from "./utils/api.js";
-import { exportTradesToCsv } from "./utils/csvExport.js";
+import { deleteTrade, getScreenshotUrl, importTrades } from "./utils/api.js";
+import { exportTradesToCsv, parseTradesCsv } from "./utils/csvExport.js";
 
 const App = () => {
   const { filters, setFilters, resetFilters } = useFilters();
   const { trades, stats, loading, error, loadTrades, updateStats, setTrades } = useTradesLoader();
-  const { tvxList } = useTvxList();
+  const { strategies, addStrategy, removeStrategy } = useTvxList();
 
   useEffect(() => {
     loadTrades(filters);
@@ -24,6 +24,19 @@ const App = () => {
   const handleResetFilters = async () => {
     const resetFiltersData = resetFilters();
     await loadTrades(resetFiltersData);
+  };
+
+  const handleAddStrategy = (strategy) => addStrategy(strategy);
+
+  const handleDeleteStrategy = async (value) => {
+    const strategy = strategies.find((item) => item.value === value);
+    if (!window.confirm(`Удалить стратегию «${strategy?.label || value}»?`)) return;
+    try {
+      await removeStrategy(value);
+      if (filters.tvx === value) setFilters((current) => ({ ...current, tvx: "" }));
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   const handleDeleteTrade = async (deletedId) => {
@@ -65,12 +78,32 @@ const App = () => {
     }
   };
 
-  const handleExportTrades = () => {
+  const handleExportTrades = async () => {
     if (!trades.length) {
       alert('Нет сделок для экспорта');
       return;
     }
-    exportTradesToCsv(trades);
+    try {
+      await exportTradesToCsv(trades, getScreenshotUrl);
+    } catch (err) {
+      alert(`Ошибка экспорта: ${err.message || err}`);
+    }
+  };
+
+  const handleImportTrades = async (event) => {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+
+    try {
+      const importedTrades = parseTradesCsv(await file.text());
+      const result = await importTrades(importedTrades);
+      const skippedMessage = result.skipped ? `, пропущено дубликатов: ${result.skipped}` : '';
+      alert(`Импортировано сделок: ${result.imported}${skippedMessage}`);
+      await loadTrades(filters);
+    } catch (err) {
+      alert(`Ошибка импорта: ${err.message || err}`);
+    }
   };
 
   return (
@@ -79,16 +112,22 @@ const App = () => {
         <h1 className="app-title">📊 Trading Journal - Журнал сделок</h1>
         <div style={{ display: 'flex', gap: 8 }}>
           <button onClick={handleExportTrades} style={{ cursor: 'pointer' }}>Скачать .csv</button>
+          <label className="csv-import-button">
+            Загрузить .csv
+            <input type="file" accept=".csv,text/csv" onChange={handleImportTrades} style={{ display: 'none' }} />
+          </label>
           <button onClick={handleDeleteVisible} style={{ cursor: 'pointer' }}>Удалить видимые</button>
         </div>
       </div>
       
       <Filters
         filters={filters}
-        tvxList={tvxList}
+        strategies={strategies}
         onFiltersChange={setFilters}
         onApply={handleApplyFilters}
         onReset={handleResetFilters}
+        onAddStrategy={handleAddStrategy}
+        onDeleteStrategy={handleDeleteStrategy}
       />
       
       {error && (
@@ -104,6 +143,7 @@ const App = () => {
       {!loading && (
         <TradesList
           trades={trades}
+          strategies={strategies}
           onDelete={handleDeleteTrade}
           onProfitLossUpdated={handleProfitLossUpdated}
         />

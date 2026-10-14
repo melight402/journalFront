@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { getTvxLabel, TVX_OPTIONS } from "../../constants/index.js";
 import { updatePositionTvx, updatePositionNote } from "../../utils/api.js";
 
-const TradeCardInfo = ({ trade }) => {
+const TradeCardInfo = ({ trade, strategies }) => {
   const [editing, setEditing] = useState(false);
   const [localTvx, setLocalTvx] = useState(trade.tvx || "");
   const [isSaving, setIsSaving] = useState(false);
@@ -65,10 +64,13 @@ const TradeCardInfo = ({ trade }) => {
               onBlur={(e) => handleSave(e.target.value)}
               disabled={isSaving}
               autoFocus
+              title={strategies.find((strategy) => strategy.value === localTvx)?.description || ""}
             >
               <option value="">Без стратегии</option>
-              {TVX_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              {strategies.map((strategy) => (
+                <option key={strategy.value} value={strategy.value} title={strategy.description}>
+                  {strategy.label}
+                </option>
               ))}
             </select>
           ) : (
@@ -77,7 +79,7 @@ const TradeCardInfo = ({ trade }) => {
               style={{ cursor: 'pointer' }}
               title="Кликните для редактирования"
             >
-              {getTvxLabel(localTvx) || '—'}
+              {strategies.find((strategy) => strategy.value === localTvx)?.label || localTvx || '—'}
             </span>
           )}
           {isSaving && <span style={{marginLeft:8}}>Сохранение...</span>}

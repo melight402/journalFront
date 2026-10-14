@@ -10,7 +10,7 @@ import DateRangeFilter from "./DateRangeFilter.jsx";
 import TimeframeFilter from "./TimeframeFilter.jsx";
 import WeekdayFilter from "./WeekdayFilter.jsx";
 
-const Filters = ({ filters, tvxList = [], onFiltersChange, onApply, onReset }) => {
+const Filters = ({ filters, strategies = [], onFiltersChange, onApply, onReset, onAddStrategy, onDeleteStrategy }) => {
   const handleChange = (field, value) => {
     onFiltersChange(prev => ({
       ...prev,
@@ -22,7 +22,13 @@ const Filters = ({ filters, tvxList = [], onFiltersChange, onApply, onReset }) =
     <div className="filters">
       <SymbolFilter value={filters.symbol} onChange={handleChange} />
       <DirectionFilter value={filters.direction} onChange={handleChange} />
-      <TvxFilter value={filters.tvx} tvxList={tvxList} onChange={handleChange} />
+      <TvxFilter
+        value={filters.tvx}
+        strategies={strategies}
+        onChange={handleChange}
+        onAdd={onAddStrategy}
+        onDelete={onDeleteStrategy}
+      />
       <TimeframeFilter value={filters.timeframe} onChange={handleChange} />
       <SessionFilter value={filters.session} onChange={handleChange} />
       <SourceTypeFilter value={filters.sourceType} onChange={handleChange} />

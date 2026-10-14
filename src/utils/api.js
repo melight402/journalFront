@@ -14,7 +14,7 @@ export const fetchHistoryPositions = async (filters = {}) => {
   if (filters.startDate) params.append('startDate', filters.startDate);
   if (filters.endDate) params.append('endDate', filters.endDate);
   if (filters.weekdays && filters.weekdays.length > 0) params.append('weekdays', filters.weekdays.join(','));
-  if (filters.limit) params.append('limit', filters.limit);
+  params.append('limit', filters.limit || 1000);
   if (filters.offset) params.append('offset', filters.offset);
 
   const url = `${API_BASE_URL}/trades/history_positions?${params.toString()}`;
@@ -37,6 +37,31 @@ export const fetchTvxList = async () => {
 
   const data = await response.json();
   return data.tvxList || [];
+};
+
+export const fetchStrategies = async () => {
+  const response = await fetch(`${API_BASE_URL}/strategies`);
+  if (!response.ok) throw new Error(`Failed to fetch strategies: ${response.statusText}`);
+  const data = await response.json();
+  return data.strategies || [];
+};
+
+export const createStrategy = async (strategy) => {
+  const response = await fetch(`${API_BASE_URL}/strategies`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(strategy),
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error || 'Не удалось создать стратегию');
+  return data.strategy;
+};
+
+export const deleteStrategy = async (value) => {
+  const response = await fetch(`${API_BASE_URL}/strategies/${encodeURIComponent(value)}`, { method: 'DELETE' });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error || 'Не удалось удалить стратегию');
+  return data;
 };
 
 export const fetchStats = async (filters = {}) => {
@@ -96,6 +121,22 @@ export const deleteTrade = async (id) => {
   }
 
   return await response.json();
+};
+
+export const importTrades = async (trades) => {
+  const url = `${API_BASE_URL}/positions/import`;
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ trades })
+  });
+
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(result.error || 'Не удалось импортировать сделки');
+  }
+
+  return result;
 };
 
 export const updatePositionTvx = async (id, tvx) => {

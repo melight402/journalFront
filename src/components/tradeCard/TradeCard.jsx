@@ -8,7 +8,7 @@ import { useTradeDelete } from "../../hooks/useTradeDelete";
 import { useScreenshotModal } from "../../hooks/useScreenshotModal";
 import { updatePositionProfitLoss } from "../../utils/api.js";
 
-const TradeCard = ({ trade, onDelete, onProfitLossUpdated }) => {
+const TradeCard = ({ trade, strategies, onDelete, onProfitLossUpdated }) => {
   const { handleDelete, isDeleting } = useTradeDelete(onDelete);
   const { modalImage, openModal, closeModal } = useScreenshotModal();
   const [isUpdatingProfitLoss, setIsUpdatingProfitLoss] = useState(false);
@@ -37,7 +37,7 @@ const TradeCard = ({ trade, onDelete, onProfitLossUpdated }) => {
           onProfitLossChange={handleProfitLossChange}
           isUpdatingProfitLoss={isUpdatingProfitLoss}
         />
-        <TradeCardInfo trade={trade} />
+        <TradeCardInfo trade={trade} strategies={strategies} />
         <TradeCardScreenshots 
           trade={trade} 
           onScreenshotClick={openModal} 
